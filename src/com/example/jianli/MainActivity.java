@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
@@ -15,14 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class MainActivity extends Activity implements TabListener  {
+public class MainActivity extends Activity implements TabListener,OnPageChangeListener {
 	
 	private ViewPager mViewPager;
-	
 	private List<View> mViewList;
 	
-	private ActionBar mActionBar;  
-    private ArrayList<ActionBar.Tab> mTabs;  
+	private ActionBar mActionBar; 
+	private List<String> mTitleList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,9 @@ public class MainActivity extends Activity implements TabListener  {
         mViewList.add(view3);
        
         
-      //取得ActionBar  
-        mActionBar=getActionBar();  
+        //取得ActionBar  
+        mActionBar=getActionBar();
+        
         //以Tab方式导航  
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);  
         //禁用ActionBar标题  
@@ -47,31 +48,28 @@ public class MainActivity extends Activity implements TabListener  {
         //禁用ActionBar图标  
         mActionBar.setDisplayUseLogoEnabled(false);  
         //禁用ActionBar返回键  
-        mActionBar.setDisplayShowHomeEnabled(false);  
+        mActionBar.setDisplayShowHomeEnabled(false); 
+        
         //添加Tabs  
-        mTabs=new ArrayList<ActionBar.Tab>();  
-          
+        /*格式如下:
         ActionBar.Tab tab0=mActionBar.newTab();  
         tab0.setText("界面一");  
         tab0.setTabListener(this);  
-        mTabs.add(tab0);  
-        mActionBar.addTab(tab0);  
-          
-        ActionBar.Tab tab1=mActionBar.newTab();  
-        tab1.setText("界面二");  
-        tab1.setTabListener(this);  
-        mTabs.add(tab1);  
-        mActionBar.addTab(tab1);  
-          
-        ActionBar.Tab tab2=mActionBar.newTab();  
-        tab2.setText("界面三");  
-        tab2.setTabListener(this);  
-        mTabs.add(tab2);  
-        mActionBar.addTab(tab2); 
+        mActionBar.addTab(tab0);  */
+        
+        mTitleList=new ArrayList<String>();
+        mTitleList.add("简介");
+        mTitleList.add("照片");
+        mTitleList.add("微博");
+        for (int i = 0; i < mTitleList.size(); i++) {  
+            mActionBar.addTab(mActionBar.newTab().setText(mTitleList.get(i))  
+                    .setTabListener(this));  
+        }  
         
         MyPagerAdapter mPagerAdapter=new MyPagerAdapter(mViewList);
         
         mViewPager=(ViewPager) findViewById(R.id.id_viewpager);
+        mViewPager.setOnPageChangeListener(this);
         mViewPager.setAdapter(mPagerAdapter);
     }
 
@@ -98,21 +96,29 @@ public class MainActivity extends Activity implements TabListener  {
 
 	@Override
 	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
-		
 	}
-
-
 	@Override
-	public void onTabSelected(Tab arg0, FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
-		
+	public void onTabSelected(Tab tab, FragmentTransaction arg1) {
+		// 必须判断是否为NULL
+		if(mViewPager!=null)  
+        {  
+           mViewPager.setCurrentItem(tab.getPosition());  
+        }  
 	}
-
-
 	@Override
 	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
-		
+	}
+
+
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+	}
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+	}
+	@Override
+	public void onPageSelected(int i) {
+		//不要忘记注册监听器
+		mActionBar.setSelectedNavigationItem(i);
 	}
 }
