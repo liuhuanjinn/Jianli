@@ -9,11 +9,9 @@ import android.view.ViewGroup;
 public class MyPagerAdapter extends PagerAdapter {
 	
 	private List<View> mViewList;
-	private List<String> mTitleList;
 	
-	public MyPagerAdapter(List<View> viewList,List<String> titleList) {
+	public MyPagerAdapter(List<View> viewList) {
 		mViewList=viewList;
-		mTitleList=titleList;
 	}
 
 	@Override
@@ -43,12 +41,5 @@ public class MyPagerAdapter extends PagerAdapter {
 		container.removeView(mViewList.get(position));
 	}
 	
-	/**
-	 * 设置页卡的标题
-	 */
-	@Override
-	public CharSequence getPageTitle(int position) {
-		return mTitleList.get(position);
-	}
 
 }

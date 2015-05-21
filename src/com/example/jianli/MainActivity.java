@@ -4,19 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity implements TabListener  {
 	
 	private ViewPager mViewPager;
 	
 	private List<View> mViewList;
-	private List<String> mTitleList;
+	
+	private ActionBar mActionBar;  
+    private ArrayList<ActionBar.Tab> mTabs;  
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +36,40 @@ public class MainActivity extends ActionBarActivity {
         mViewList.add(view1);
         mViewList.add(view2);
         mViewList.add(view3);
-        mTitleList=new ArrayList<String>();
-        mTitleList.add("简介"	);
-        mTitleList.add("图片"	);
-        mTitleList.add("微博"	);
+       
         
-        MyPagerAdapter mPagerAdapter=new MyPagerAdapter(mViewList,mTitleList);
+      //取得ActionBar  
+        mActionBar=getActionBar();  
+        //以Tab方式导航  
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);  
+        //禁用ActionBar标题  
+        mActionBar.setDisplayShowTitleEnabled(false);  
+        //禁用ActionBar图标  
+        mActionBar.setDisplayUseLogoEnabled(false);  
+        //禁用ActionBar返回键  
+        mActionBar.setDisplayShowHomeEnabled(false);  
+        //添加Tabs  
+        mTabs=new ArrayList<ActionBar.Tab>();  
+          
+        ActionBar.Tab tab0=mActionBar.newTab();  
+        tab0.setText("界面一");  
+        tab0.setTabListener(this);  
+        mTabs.add(tab0);  
+        mActionBar.addTab(tab0);  
+          
+        ActionBar.Tab tab1=mActionBar.newTab();  
+        tab1.setText("界面二");  
+        tab1.setTabListener(this);  
+        mTabs.add(tab1);  
+        mActionBar.addTab(tab1);  
+          
+        ActionBar.Tab tab2=mActionBar.newTab();  
+        tab2.setText("界面三");  
+        tab2.setTabListener(this);  
+        mTabs.add(tab2);  
+        mActionBar.addTab(tab2); 
+        
+        MyPagerAdapter mPagerAdapter=new MyPagerAdapter(mViewList);
         
         mViewPager=(ViewPager) findViewById(R.id.id_viewpager);
         mViewPager.setAdapter(mPagerAdapter);
@@ -60,4 +94,25 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+	@Override
+	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onTabSelected(Tab arg0, FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
+		
+	}
 }
