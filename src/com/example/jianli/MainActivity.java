@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 
 
 public class MainActivity extends Activity implements TabListener,OnPageChangeListener {
@@ -23,20 +24,14 @@ public class MainActivity extends Activity implements TabListener,OnPageChangeLi
 	
 	private ActionBar mActionBar; 
 	private List<String> mTitleList;
+	
+	private WebView mWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        mViewList=new ArrayList<View>();
-        View view1 = View.inflate(this, R.layout.view01, null);
-        View view2 = View.inflate(this, R.layout.view02, null);
-        View view3 = View.inflate(this, R.layout.view03, null);
-        mViewList.add(view1);
-        mViewList.add(view2);
-        mViewList.add(view3);
-       
         
         //取得ActionBar  
         mActionBar=getActionBar();
@@ -66,6 +61,20 @@ public class MainActivity extends Activity implements TabListener,OnPageChangeLi
                     .setTabListener(this));  
         }  
         
+        mViewList=new ArrayList<View>();
+        View view1 = View.inflate(this, R.layout.view01, null);
+        View view2 = View.inflate(this, R.layout.view02, null);
+        View view3 = View.inflate(this, R.layout.view03, null);
+        mViewList.add(view1);
+        mViewList.add(view2);
+        mViewList.add(view3);
+
+        mWebView=(WebView) view3.findViewById(R.id.id_webview);
+        //加载需要显示的网页 
+        mWebView.loadUrl("http://m.baidu.com/"); 
+        //设置Web视图 
+        mWebView.setWebViewClient(new MyWebViewClient ());
+       
         MyPagerAdapter mPagerAdapter=new MyPagerAdapter(mViewList);
         
         mViewPager=(ViewPager) findViewById(R.id.id_viewpager);
