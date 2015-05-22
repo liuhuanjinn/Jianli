@@ -1,31 +1,26 @@
 package com.example.jianli;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebView;
 
 
-public class MainActivity extends Activity implements TabListener,OnPageChangeListener {
-	
-	private ViewPager mViewPager;
-	private List<View> mViewList;
+public class MainActivity extends FragmentActivity implements TabListener,OnPageChangeListener {
 	
 	private ActionBar mActionBar; 
-	private List<String> mTitleList;
+	private ViewPager mViewPager;
 	
-	private WebView mWebView;
+	//private WebView mWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,34 +47,35 @@ public class MainActivity extends Activity implements TabListener,OnPageChangeLi
         tab0.setTabListener(this);  
         mActionBar.addTab(tab0);  */
         
-        mTitleList=new ArrayList<String>();
+        ArrayList<String> mTitleList=new ArrayList<String>();
         mTitleList.add("ºÚΩÈ");
         mTitleList.add("’’∆¨");
         mTitleList.add("Œ¢≤©");
         for (int i = 0; i < mTitleList.size(); i++) {  
             mActionBar.addTab(mActionBar.newTab().setText(mTitleList.get(i))  
                     .setTabListener(this));  
-        }  
+        }
         
-        mViewList=new ArrayList<View>();
-        View view1 = View.inflate(this, R.layout.view01, null);
-        View view2 = View.inflate(this, R.layout.view02, null);
-        View view3 = View.inflate(this, R.layout.view03, null);
-        mViewList.add(view1);
-        mViewList.add(view2);
-        mViewList.add(view3);
-
-        mWebView=(WebView) view3.findViewById(R.id.id_webview);
+        
+        ArrayList<Fragment> mFragmentList=new ArrayList<Fragment>();
+        Fragment01 mFragment1=new Fragment01();
+    	Fragment02 mFragment2=new Fragment02();
+        Fragment03 mFragment3=new Fragment03();
+        mFragmentList.add(mFragment1);
+        mFragmentList.add(mFragment2);
+        mFragmentList.add(mFragment3);
+        
+       /* mWebView=(WebView) view3.findViewById(R.id.id_webview);
         //º”‘ÿ–Ë“™œ‘ æµƒÕ¯“≥ 
         mWebView.loadUrl("http://m.baidu.com/"); 
         //…Ë÷√Web ”Õº 
-        mWebView.setWebViewClient(new MyWebViewClient ());
+        mWebView.setWebViewClient(new MyWebViewClient ());*/
        
-        MyPagerAdapter mPagerAdapter=new MyPagerAdapter(mViewList);
+        MyFragmentAdapter mFragmentAdapter=new MyFragmentAdapter(getSupportFragmentManager(), mFragmentList);
         
         mViewPager=(ViewPager) findViewById(R.id.id_viewpager);
         mViewPager.setOnPageChangeListener(this);
-        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setAdapter(mFragmentAdapter);
     }
 
 
