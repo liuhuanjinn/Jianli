@@ -20,16 +20,14 @@ public class MainActivity extends FragmentActivity implements TabListener,OnPage
 	private ActionBar mActionBar; 
 	private ViewPager mViewPager;
 	
-	//private WebView mWebView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        init();
         
-        //取得ActionBar  
-        mActionBar=getActionBar();
+        //[ActionBar,Fragment是3.0以后引入的,Fragment可以引入support.v4包向下兼容低版本]
         
         //以Tab方式导航  
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);  
@@ -40,14 +38,28 @@ public class MainActivity extends FragmentActivity implements TabListener,OnPage
         //禁用ActionBar返回键  
         mActionBar.setDisplayShowHomeEnabled(false); 
         
-        //添加Tabs  
-        /*格式如下:
-        ActionBar.Tab tab0=mActionBar.newTab();  
-        tab0.setText("界面一");  
-        tab0.setTabListener(this);  
-        mActionBar.addTab(tab0);  */
+        ArrayList<Fragment> mFragmentList=new ArrayList<Fragment>();
+        Fragment01 mFragment1=new Fragment01();
+    	Fragment02 mFragment2=new Fragment02();
+        Fragment03 mFragment3=new Fragment03();
+        mFragmentList.add(mFragment1);
+        mFragmentList.add(mFragment2);
+        mFragmentList.add(mFragment3);
         
-        ArrayList<String> mTitleList=new ArrayList<String>();
+        MyFragmentAdapter mFragmentAdapter=new MyFragmentAdapter(getSupportFragmentManager(), mFragmentList);
+        
+        mViewPager.setAdapter(mFragmentAdapter);
+        
+        //设置ViewPager多缓存一个页面(默认1,设为2)
+        mViewPager.setOffscreenPageLimit(2);  
+    }
+
+
+    private void init() {
+    	
+    	mActionBar=getActionBar();
+    	
+    	ArrayList<String> mTitleList=new ArrayList<String>();
         mTitleList.add("简介");
         mTitleList.add("照片");
         mTitleList.add("微博");
@@ -57,29 +69,12 @@ public class MainActivity extends FragmentActivity implements TabListener,OnPage
         }
         
         
-        ArrayList<Fragment> mFragmentList=new ArrayList<Fragment>();
-        Fragment01 mFragment1=new Fragment01();
-    	Fragment02 mFragment2=new Fragment02();
-        Fragment03 mFragment3=new Fragment03();
-        mFragmentList.add(mFragment1);
-        mFragmentList.add(mFragment2);
-        mFragmentList.add(mFragment3);
-        
-       /* mWebView=(WebView) view3.findViewById(R.id.id_webview);
-        //加载需要显示的网页 
-        mWebView.loadUrl("http://m.baidu.com/"); 
-        //设置Web视图 
-        mWebView.setWebViewClient(new MyWebViewClient ());*/
-       
-        MyFragmentAdapter mFragmentAdapter=new MyFragmentAdapter(getSupportFragmentManager(), mFragmentList);
-        
         mViewPager=(ViewPager) findViewById(R.id.id_viewpager);
         mViewPager.setOnPageChangeListener(this);
-        mViewPager.setAdapter(mFragmentAdapter);
-    }
+	}
 
 
-    @Override
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
